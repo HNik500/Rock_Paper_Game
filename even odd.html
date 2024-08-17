@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock Paper Scissors Game</title>
+    <style>
+body{
+    background-color: rgb(25, 25, 25);
+    color: white;
+    font-family: arial;
+}
+.title{
+    font-size: 30px;
+    font-weight: bold;
+}
+.ROCK{
+height: 50px;
+}
+.PAPER{
+    height: 50px;
+}
+.scissors{
+    height: 50px;
+}
+.move-btn{
+    background-color: transparent;
+    border: 3px solid white;
+    width: 100px;
+    height: 100px;
+    border-radius: 60px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.result{
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 50px;
+}
+.scores{
+    margin-top: 60px;
+}
+.reset-score-button,.auto-play{
+    background-color: white;
+    border: none;
+    font-size: 15px;
+    padding: 8px 15px;
+}
+
+    </style>
+</head>
+<body>
+  
+    <p class="title">Rock Paper Scissors</p>
+    <button class="move-btn js-rock-btn">
+<img src="images/rock.png" alt="rock" class="ROCK"></button>
+
+    <button class="move-btn js-paper-btn">
+<img src="images/paper.png" alt="paper" class="PAPER"></button>
+
+    <button  class="move-btn js-scissors-btn">
+<img src="images/scissors.png" alt="scissors pic" class="scissors">
+</button>
+<p class="displayscore result" ></p>
+<p class = "js-result"> </p>
+<p class = "mycompresult scores "></p>
+    <button onclick="
+    score.win = 0;
+    score.losses = 0;
+    score.ties = 0;
+    updatescoreonscreen();
+    " class="reset-score-button">Reset score</button>
+    <button class="auto-play"
+    onclick="
+    autoplay();"
+    >Autoplay</button>
+<script> 
+
+const score = {
+  win: 0,
+  losses: 0,
+  ties: 0
+};
+let isautoplay = false;
+let setIntervalid;
+function autoplay(){
+    if(!isautoplay){
+        setIntervalid = setInterval(function(){
+        const playermove = pickComputerMove();
+playGame(playermove); 
+    },1000);
+    isautoplay = true;
+    } else{
+clearInterval(setIntervalid);
+isautoplay = false;
+    }
+    
+}
+document.querySelector('.js-rock-btn').addEventListener('click',() => {
+    playGame('rock');
+});
+document.querySelector('.js-paper-btn').addEventListener('click',() => {
+    playGame('paper');
+});
+document.querySelector('.js-scissors-btn').addEventListener('click',() => {
+    playGame('scissors');
+});
+document.body.addEventListener('keydown', (even) => {
+    if(event.key === 'r'){
+        playGame('rock');
+    } else if(event.key === 'p'){
+        playGame('paper');
+    } else if(event.key === 's'){
+        playGame('scissors');
+    }
+})
+
+function playGame(playerMove) {
+    const computerMove = pickComputerMove();
+    let result = '';
+
+    if (playerMove === 'scissors') {
+        if (computerMove === 'rock') {
+            result = 'You lose';
+        } else if (computerMove === 'paper') {
+            result = 'You win';
+        } else if (computerMove === 'scissors') {
+            result = 'We tie';
+        }
+    } else if (playerMove === 'paper') {
+        if (computerMove === 'rock') {
+            result = 'You win';
+        } else if (computerMove === 'paper') {
+            result = 'We tie';
+        } else if (computerMove === 'scissors') {
+            result = 'You lose';
+        }
+    } else if (playerMove === 'rock') {
+        if (computerMove === 'rock') {
+            result = 'We Tie';
+        } else if (computerMove === 'paper') {
+            result = 'You lose';
+        } else if (computerMove === 'scissors') {
+            result = 'You win';
+        }
+    }
+
+    if (result === 'You win') {
+        score.win += 1;
+    } else if (result === 'You lose') {
+        score.losses += 1;
+    } else if (result === 'We tie') {
+        score.ties += 1;
+    }
+updatescoreonscreen();
+document.querySelector('.js-result').innerHTML = result;
+document.querySelector('.mycompresult').innerHTML = `you
+<img src="images/${playerMove}.png" class="move-btn" alt="rock-pic">
+<img src="images/${computerMove}.png" alt="scissors pic" class="move-btn">
+computer`;
+
+
+
+    //alert(`You picked ${playerMove} and computer picked ${computerMove}, ${result}
+    //wins: ${score.win}, losses: ${score.losses}, ties: ${score.ties}`);
+}
+
+
+
+function updatescoreonscreen(){
+    document.querySelector('.displayscore').innerHTML = 
+`wins: ${score.win}, losses: ${score.losses}, ties: ${score.ties}`;
+}
+
+function pickComputerMove() {
+    const randomNumber = Math.random();
+    let computerMove = ''; 
+
+    if (randomNumber >= 0 && randomNumber < 1/3) {
+        computerMove = 'rock';
+    } else if (randomNumber >= 1/3 && randomNumber < 2/3) {
+        computerMove = 'paper';
+    } else if (randomNumber >= 2/3 && randomNumber < 1) {
+        computerMove = 'scissors';
+    }
+
+    return computerMove;    
+}
+</script>
+</body>
+</html>
